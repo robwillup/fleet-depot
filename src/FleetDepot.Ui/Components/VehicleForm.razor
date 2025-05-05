@@ -1,0 +1,70 @@
+﻿@using FleetDepot.Ui.Models
+
+@if (IsOpen)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Vehicle</h5>
+                    <button type="button" class="btn-close" @onclick="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="mb-2">
+                            <label>Series</label>
+                            <InputText class="form-control" @bind-Value="model.Series"
+                                       disabled="@(isEdit ? "disabled" : null)" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Number</label>
+                            <InputNumber class="form-control" @bind-Value="model.Number"
+                                         disabled="@(isEdit ? "disabled" : null)" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Color</label>
+                            <InputText class="form-control" @bind-Value="model.Color" />
+                        </div>
+                        <button class="btn btn-primary" type="submit">Save</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public Vehicle Vehicle { get; set; } = new();
+    [Parameter] public EventCallback<Vehicle> OnSave { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public bool isEdit { get; set; }
+
+    [Parameter] public bool IsOpen { get; set; }
+
+    private Vehicle model = new();
+
+    protected override void OnParametersSet()
+    {
+        model = new Vehicle
+            {
+                Series = Vehicle.Series,
+                Number = Vehicle.Number,
+                Color = Vehicle.Color
+            };
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await OnSave.InvokeAsync(model);
+        await Close();
+    }
+
+    private async Task Close()
+    {
+        if (OnClose.HasDelegate)
+            await OnClose.InvokeAsync();
+    }
+
+}

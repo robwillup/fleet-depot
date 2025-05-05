@@ -1,0 +1,59 @@
+﻿@page "/fleet"
+@using FleetDepot.Ui.Components
+@using FleetDepot.Ui.Models
+@using System.Text.Json
+@inject HttpClient Http
+
+<PageTitle>Fleet</PageTitle>
+
+<h1>Fleet</h1>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @errorMessage
+        <button type="button" class="btn-close" @onclick="() => errorMessage = null" aria-label="Close"></button>
+    </div>
+}
+@if (vehicles is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <VehicleFilter OnFilterChanged="HandleFilterChange" />
+    <VehicleTable Vehicles="vehicles" ShowActions=false />
+}
+
+@code {
+    private VehicleFilterModel currentFilter = new();
+    private List<Vehicle> vehicles = [];
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        vehicles = await Http.GetFromJsonAsync<List<Vehicle>>("api/vehicles") ?? [];
+    }
+
+    private async Task HandleFilterChange(VehicleFilterModel filter)
+    {
+        currentFilter = filter;
+        await LoadFilteredVehicles();
+    }
+
+    private async Task LoadFilteredVehicles()
+    {
+        try
+        {
+            Vehicle vehicle = await Http.GetFromJsonAsync<Vehicle>($"api/vehicles/{currentFilter.Series}/{currentFilter.Number}") ?? null;
+
+            vehicles = vehicle == null ? [] : new List<Vehicle>() { vehicle };
+
+            errorMessage = null;
+        }
+        catch (JsonException)
+        {
+            errorMessage = "No vehicle found.";
+        }
+    }
+}

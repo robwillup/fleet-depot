@@ -1,0 +1,34 @@
+name: FleetDepot CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+  workflow_dispatch: # This allows us to trigger the workflow manually
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Test
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            9.0.x
+
+      - name: Build
+        run: |
+          dotnet build FleetDepot.sln
+
+      - name: Test
+        run: |
+          dotnet test FleetDepot.sln

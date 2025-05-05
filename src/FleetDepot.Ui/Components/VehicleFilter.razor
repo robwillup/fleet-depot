@@ -1,0 +1,40 @@
+﻿@using FleetDepot.Ui.Models
+@using System.ComponentModel.DataAnnotations
+<EditForm Model="model" OnValidSubmit="ApplyFilters">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="card p-3 mb-3">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <InputText class="form-control" @bind-Value="model.Series" placeholder="Series" />
+                <ValidationMessage For="@(() => model.Series)" />
+            </div>
+            <div class="col-md-4">
+                <InputText class="form-control" @bind-Value="model.Number" placeholder="Number" />
+                <ValidationMessage For="@(() => model.Number)" />
+            </div>
+            <div class="col-md-4 d-flex align-items-center">
+                <button type="submit" class="btn btn-primary me-2">Filter</button>
+                <button type="button" class="btn btn-secondary" @onclick="ClearFilters">Clear</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private VehicleFilterModel model = new();
+
+    [Parameter] public EventCallback<VehicleFilterModel> OnFilterChanged { get; set; }
+
+    private async Task ApplyFilters()
+    {
+        await OnFilterChanged.InvokeAsync(model);
+    }
+
+    private async Task ClearFilters()
+    {
+        model = new VehicleFilterModel();
+        await OnFilterChanged.InvokeAsync(model);
+    }
+}

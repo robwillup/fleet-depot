@@ -1,0 +1,48 @@
+﻿@using FleetDepot.Ui.Models
+@inject IJSRuntime JSRuntime
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Series</th>
+            <th>Number</th>
+            <th>Color</th>
+            <th>Passengers</th>
+            <th>Type</th>
+            @if (ShowActions)
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Vehicles)
+        {
+            <tr>
+                <td>@vehicle.Series</td>
+                <td>@vehicle.Number</td>
+                <td>@vehicle.Color</td>
+                <td>@vehicle.NumberOfPassengers</td>
+                <td>@vehicle.Type</td>
+                @if (ShowActions)
+                {
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick:stopPropagation="true" @onclick="() => OnDelete.InvokeAsync(vehicle)">
+                            Delete
+                        </button>
+                        <button class="btn btn-primary btn-sm ms-1" @onclick:stopPropagation="true" @onclick="() => OnEdit.InvokeAsync(vehicle)">
+                            Edit
+                        </button>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter] public IEnumerable<Vehicle> Vehicles { get; set; } = [];
+    [Parameter] public EventCallback<Vehicle> OnEdit { get; set; }
+    [Parameter] public EventCallback<Vehicle> OnDelete { get; set; }
+    [Parameter] public bool ShowActions { get; set; } = true;
+}

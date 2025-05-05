@@ -1,0 +1,6 @@
+@FleetDepot.Api_HostAddress = http://localhost:5084
+
+GET {{FleetDepot.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

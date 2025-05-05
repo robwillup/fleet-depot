@@ -1,0 +1,53 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">FleetDepot.Ui</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link d-flex align-items-center gap-2" href="fleet">
+                <span class="bi bi-columns-gap fs-5" style="line-height: 1;" aria-hidden="true"></span>
+                <span>Fleet</span>
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link d-flex align-items-center gap-2" href="cars">
+                <span class="bi bi-car-front fs-5" style="line-height: 1;" aria-hidden="true"></span>
+                <span>Cars</span>
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link d-flex align-items-center gap-2" href="buses">
+                <span class="bi bi-bus-front fs-5" style="line-height: 1;" aria-hidden="true"></span>
+                <span>Buses</span>
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link d-flex align-items-center gap-2" href="trucks">
+                <span class="bi bi-truck fs-5" style="line-height: 1;" aria-hidden="true"></span>
+                <span>Trucks</span>
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
