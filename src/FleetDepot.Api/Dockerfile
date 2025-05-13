@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 5084
 ENV ASPNETCORE_URLS=http://0.0.0.0:5084
-# TODO: Remove this line when ready to ship.
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV DB_CONNECTION_STRING="server=changeme;port=3306;database=changeme;user=changeme;password=changeme;"
 USER $APP_UID
 
 # This stage is used to build the service project

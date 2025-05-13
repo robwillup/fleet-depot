@@ -9,11 +9,6 @@ public class FleetDepotDb : DbContext
 
     public FleetDepotDb(DbContextOptions<FleetDepotDb> options) : base(options) { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseInMemoryDatabase("FleetDepotDb");
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Vehicle>(vehicle =>

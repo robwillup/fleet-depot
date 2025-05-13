@@ -4,6 +4,7 @@ using FleetDepot.Core.Services;
 using FleetDepot.Dal;
 using FleetDepot.Types.Models;
 using FleetDepot.Dal.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,19 @@ if (string.IsNullOrEmpty(urls))
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FleetDepotDb>();
+builder.Services.AddDbContext<FleetDepotDb>(options =>
+{
+    System.Console.WriteLine(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"));
+    if (builder.Environment.IsProduction() || builder.Environment.IsDevelopment())
+    {
+        var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+        options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    }
+    else
+    {
+        options.UseInMemoryDatabase(builder.Configuration.GetValue<string>("dbName")!);
+    }
+});
 builder.Services.AddScoped<IVehicleRepository<Vehicle>, VehicleRepository<Vehicle>>();
 builder.Services.AddScoped<IVehicleService<VehicleDto>, VehicleService<VehicleDto, Vehicle>>();
 builder.Services.AddScoped<IVehicleService<CarDto>, CarService>();
@@ -37,6 +50,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+System.Console.WriteLine(app.Configuration.GetValue<string>("dbName"));
 
 if (app.Environment.IsDevelopment())
 {
