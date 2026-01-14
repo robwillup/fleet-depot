@@ -4,7 +4,7 @@ This solution is composed of a Blazor WASM UI, a backend REST API, a CLI, class 
 
 ## Running the FleetDepot App
 
-.NET 9 is required for this application to run. Follow these instructions to install .NET 9 (if you don't already have it)
+.NET 10 is required for this application to run. Follow these instructions to install .NET 10 (if you don't already have it)
 and to run the app.
 
 > The `Run.ps1` and `run.sh` scripts start the API and UI in separate terminal windows.
@@ -12,13 +12,13 @@ and to run the app.
 ### Windows
 
 * Open a PowerShell terminal and navigate to the root of this repository, i.e., `fleet-depot`.
-* If you don't have .NET 9 installed, run:
+* If you don't have .NET 10 installed, run:
 
 ```PowerShell
-.\scripts\dotnet-install.ps1 -Channel 9.0
+.\scripts\dotnet-install.ps1 -Channel 10.0
 ```
 
-* With .NET 9 installed, run:
+* With .NET 10 installed, run:
 
 ```PowerShell
 .\scripts\Run.ps1
@@ -27,27 +27,33 @@ and to run the app.
 ### macOS
 
 * Open a terminal and navigate to the root of this repository, i.e., `fleet-depot`.
-* If you don't have .NET 9 installed, run:
+* If you don't have .NET 10 installed, run:
 
 ```bash
 chmod +x ./scripts/dotnet-install.sh
-sudo ./scripts/dotnet-install.sh --channel 9.0
+sudo ./scripts/dotnet-install.sh --channel 10.0
 ```
 
-* With .NET 9 installed, run:
+* With .NET 10 installed, run:
 
 ```bash
 chmod +x ./scripts/run.sh
 ```
 
-### Docker
+### Docker Or Podman
 
-If you have Docker installed, you can run the UI and API with the following command:
+If you have Docker or Podman installed, you can run the UI and API with the following command:
 
 > NOTE: Make sure you run this command from the root of the repository, i.e., `fleet-depot/`
 
 ```bash
-docker compose -f .\build\compose.yml up
+docker compose -f ./build/compose.yml up
+```
+
+or
+
+```bash
+podman compose -f ./build/compose.yml up
 ```
 
 This is going to build the images and run both apps.
